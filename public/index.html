@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Generator</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAAAIAIABAAAAAAIAAAQAAAABAAAAAAD..." />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <div id="head">
+                <h1>Prompt2UI</h1>
+                <p>Create webpages easily from your prompts!</p>
+            </div>
+            <form id="websiteForm">
+                <input type="text" id="prompt" placeholder="Enter your prompt" required>
+                <button type="submit">Generate</button>
+            </form>
+        </div>
+
+        <div id="result" class="result"></div>
+    </div>
+  <div id="result"></div>
+    
+
+    <script>
+        
+
+
+     document.getElementById('websiteForm').addEventListener('submit', async (e) => { 
+        e.preventDefault(); 
+        const prompt = document.getElementById('prompt').value; 
+        const response = await fetch('/generate-website', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: prompt }) }); 
+      
+        let htmlContent = await response.text();
+        htmlContent = decodeURIComponent(htmlContent);
+        
+        console.log("Cleaned HTML:", htmlContent); //to debug html content
+        
+        const iframe = document.createElement('iframe');
+            iframe.setAttribute('srcdoc', htmlContent);
+            //iframe.setAttribute('srcdoc', '<html><body><h1>Hello World</h1></body></html>'); //hardcoding to check iframe
+
+            iframe.style.width = "100%";
+            iframe.style.height = "100vh";
+            iframe.frameBorder = "0";
+            iframe.title ="generated webpage"
+            document.getElementById('result').innerHTML = ''; 
+            document.getElementById('result').appendChild(iframe); 
+    });
+    </script>
+    
+</body>
+</html>
